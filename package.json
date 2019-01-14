@@ -1,0 +1,16 @@
+{
+  "licence": "MIT",
+  "scripts": {
+    "server": "node server --prefix Server",
+    "start": "wait-on -r http://localhost:1337 && gulp",
+    "dev": "concurrently \"npm run server\" \"npm run start\""
+  },
+  "dependencies": {
+    "browser-sync": "^2.26.3",
+    "concurrently": "^4.1.0",
+    "gulp": "^3.9.1",
+    "gulp-sass": "^4.0.2",
+    "moment": "^2.23.0",
+    "wait-on": "^3.2.0"
+  }
+}
