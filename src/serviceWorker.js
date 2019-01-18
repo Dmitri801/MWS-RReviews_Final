@@ -4,7 +4,7 @@ if (typeof idb === "undefined") {
 
 self.importScripts("js/idb/utility.js");
 
-const cacheName = "v8";
+const cacheName = "v9";
 
 const cacheAssets = [
   "index.html",
@@ -50,9 +50,21 @@ self.addEventListener("fetch", event => {
     event.respondWith(
       fetch(event.request).then(res => {
         const clonedRes = res.clone();
-        clonedRes.json().then(data => {
-          data.forEach(restObj => {
+        clonedRes.json().then(restaurantData => {
+          restaurantData.forEach(restObj => {
             writeData("restaurants", restObj);
+          });
+        });
+        return res;
+      })
+    );
+  } else if (event.request.url.includes("http://localhost:1337/reviews")) {
+    event.respondWith(
+      fetch(event.request).then(res => {
+        const clonedRes = res.clone();
+        clonedRes.json().then(reviewData => {
+          reviewData.forEach(reviewObj => {
+            writeData("reviews", reviewObj);
           });
         });
         return res;

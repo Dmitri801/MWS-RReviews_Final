@@ -1,5 +1,48 @@
+const accordion = document.querySelector(".accordion-btn");
+const restaurantHours = document.getElementById("restaurant-hours");
+const addReviewBtn = document.getElementById("addReviewBtn");
+const modal = document.getElementById("mainModal");
+const closeBtn = document.getElementById("closeBtn");
+const stars = document.querySelectorAll(".fas.fa-star");
+const selectRatingTxt = document.getElementById("selectRatingTxt");
+const addReviewForm = document.getElementById("addReviewForm");
+const ratingInput = document.getElementById("ratingValue");
+const nameInput = document.getElementById("nameInput");
+const commentsInput = document.getElementById("commentsInput");
+const favoriteContainer = document.getElementById("favoriteBtn");
+const snackBar = document.getElementById("snackBar");
+const snackBarMsg = document.getElementById("snackbarMsg");
+const snackBarDismiss = document.getElementById("snackbarDismiss");
 let restaurant;
 var newMap;
+
+class Toaster {
+  constructor(element, message, type) {
+    this.element = element;
+    this.message = message;
+    this.type = type;
+  }
+  static show(element, message, type) {
+    if (type === "error") {
+      snackBarMsg.style.color = "red";
+    } else if (type === "success") {
+      snackBarMsg.style.color = "green";
+    }
+    snackBarMsg.innerHTML = message;
+    element.classList.add("activate");
+    setTimeout(() => {
+      element.classList.remove("activate");
+    }, 7700);
+  }
+  static dismiss(element) {
+    element.style.opacity = 0;
+
+    setTimeout(() => {
+      element.classList.remove("activate");
+      element.style.opacity = 1;
+    }, 110);
+  }
+}
 
 /**
  * Initialize map as soon as the page is loaded.
@@ -11,6 +54,21 @@ document.addEventListener("DOMContentLoaded", event => {
   const restInfoDiv = document.querySelector("#restaurant-info");
   const mapSection = document.createElement("section");
   const mapDiv = document.createElement("div");
+
+  if (localStorage.getItem("postSuccess")) {
+    Toaster.show(snackBar, "Your review was added!", "success");
+    localStorage.removeItem("postSuccess");
+  }
+
+  if (localStorage.getItem("unfavorite")) {
+    Toaster.show(snackBar, "Restaurant removed from favorites", "success");
+    localStorage.removeItem("unfavorite");
+  }
+
+  if (localStorage.getItem("favorite")) {
+    Toaster.show(snackBar, "Restaurant added to favorites", "success");
+    localStorage.removeItem("favorite");
+  }
 
   if (window.innerWidth < 949 && map !== null) {
     mainContent.removeChild(map);
@@ -26,6 +84,10 @@ document.addEventListener("DOMContentLoaded", event => {
   } else {
     initMap();
   }
+});
+
+snackBarDismiss.addEventListener("click", () => {
+  Toaster.dismiss(snackBar);
 });
 
 /**
@@ -92,22 +154,6 @@ initMapOnScreenChange = () => {
   });
 };
 
-/* window.initMap = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
-      });
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-    }
-  });
-} */
-
 /**
  * Get current restaurant from page URL.
  */
@@ -139,7 +185,49 @@ fetchRestaurantFromURL = callback => {
  * Create restaurant HTML and add it to the webpage
  */
 fillRestaurantHTML = (restaurant = self.restaurant) => {
-  console.log(restaurant);
+  if (restaurant.is_favorite === "true" || true) {
+    const heartIcon = document.createElement("i");
+    heartIcon.className = "fas fa-heart";
+    heartIcon.style.color = "rgb(228, 39, 39)";
+    heartIcon.addEventListener("click", () => {
+      fetch(
+        `http://localhost:1337/restaurants/${restaurant.id}/?is_favorite=false
+      `,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      ).then(res => {
+        localStorage.setItem("unfavorite", res.status);
+        location.reload();
+      });
+    });
+    favoriteContainer.appendChild(heartIcon);
+  }
+
+  if (restaurant.is_favorite !== "true" || false) {
+    const heartIcon = document.createElement("i");
+    heartIcon.className = "fas fa-heart";
+    heartIcon.style.color = "#ddd";
+    heartIcon.addEventListener("click", () => {
+      fetch(
+        `http://localhost:1337/restaurants/${restaurant.id}/?is_favorite=true
+      `,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      ).then(res => {
+        localStorage.setItem("favorite", res.status);
+        location.reload();
+      });
+    });
+    favoriteContainer.appendChild(heartIcon);
+  }
   const name = document.getElementById("restaurant-name");
   name.innerHTML = restaurant.name;
 
@@ -159,6 +247,10 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const cuisine = document.getElementById("restaurant-cuisine");
   cuisine.innerHTML = restaurant.cuisine_type;
+
+  // Add title to review form
+  const reviewFormHeader = document.getElementById("addReviewHeader");
+  reviewFormHeader.innerHTML += restaurant.name;
 
   // fill operating hours
   if (restaurant.operating_hours) {
@@ -286,9 +378,6 @@ getParameterByName = (name, url) => {
 };
 
 // Accordion
-const accordion = document.querySelector(".accordion-btn");
-const restaurantHours = document.getElementById("restaurant-hours");
-
 accordion.addEventListener("click", () => {
   accordionOperator();
 });
@@ -341,3 +430,90 @@ window.addEventListener("resize", () => {
     }, 200);
   }
 });
+
+// Modal -- ADD A REVIEW
+const reviewMessage = [
+  "Select A Rating",
+  "It was terrible!",
+  "Not impressed..",
+  "Not bad, not too good.",
+  "I liked it.",
+  "Awesome, fantastic!"
+];
+
+addReviewBtn.addEventListener("click", openReviewModal);
+closeBtn.addEventListener("click", closeReviewModal);
+window.addEventListener("click", outsideModalClick);
+function openReviewModal() {
+  modal.style.display = "block";
+  stars.forEach(star => {
+    star.addEventListener("click", setRating);
+  });
+
+  selectRatingTxt.innerHTML = reviewMessage[parseInt(ratingInput.value)];
+  // let target = stars[rating - 1];
+  // target.dispatchEvent(new MouseEvent("click"));
+}
+function closeReviewModal() {
+  modal.style.display = "none";
+}
+
+function outsideModalClick(e) {
+  if (e.target === modal) {
+    modal.style.display = "none";
+  }
+}
+
+// Star rating select
+
+function setRating(event) {
+  let clickedStar = event.currentTarget;
+
+  let match = false;
+  let num = 0;
+  stars.forEach((star, index) => {
+    if (match) {
+      star.classList.remove("rated");
+    } else {
+      star.classList.add("rated");
+    }
+    if (clickedStar === star) {
+      match = true;
+      num = index + 1;
+      ratingInput.value = num;
+      selectRatingTxt.innerHTML = reviewMessage[parseInt(ratingInput.value)];
+    }
+  });
+}
+
+// Review Submission POST
+
+addReviewForm.addEventListener("submit", e => {
+  e.preventDefault();
+  submitReviewForm();
+});
+
+function submitReviewForm(restaurant = self.restaurant) {
+  if (ratingInput.value == 0) {
+    Toaster.show(snackBar, "Rating is required.", "error");
+  } else {
+    let newReview = {
+      restaurant_id: restaurant.id,
+      name: nameInput.value,
+      rating: parseInt(ratingInput.value),
+      comments: commentsInput.value
+    };
+    fetch(`http://localhost:1337/reviews`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newReview)
+    }).then(res => {
+      if (res.status === 201) {
+        localStorage.setItem("postSuccess", res.status);
+        window.location.reload();
+      }
+    });
+  }
+}

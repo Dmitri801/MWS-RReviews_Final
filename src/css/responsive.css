@@ -1,12 +1,16 @@
 @media screen and (min-width: 1148px) {
   #review-head #review-name {
-    min-width: 10% !important; } }
+    min-width: 10% !important; }
+  .modal-body {
+    padding: 50px 60px !important; }
+  .form-row.btn {
+    width: 500px !important; } }
 
 @media screen and (max-width: 1149px) {
   #restaurants-list {
     grid-template-columns: 1fr 1fr; } }
 
-@media screen and (max-width: 949px) {
+@media screen and (max-width: 972px) {
   #restaurant-container {
     width: 100% !important; }
   #breadcrumb {
@@ -18,7 +22,12 @@
   .accordion-container {
     width: 100% !important; }
   #review-head #review-name {
-    min-width: 10% !important; } }
+    min-width: 10% !important; }
+  .form-row {
+    grid-template-columns: 4fr !important;
+    grid-gap: 5px !important; }
+  input[name="name"] {
+    width: 350px !important; } }
 
 @media screen and (max-width: 769px) {
   #restaurants-list {
@@ -34,6 +43,20 @@
   .icon-credit {
     font-size: 3pt !important; } }
 
-@media screen and (max-width: 556px) {
+@media screen and (max-width: 596px) {
   #review-head #review-name {
-    min-width: 20% !important; } }
+    min-width: 20% !important; }
+  input[name="name"] {
+    width: 200px !important; }
+  .comments-textarea {
+    width: 250px !important; }
+  .form-row.btn {
+    width: 200px !important; }
+  .modal-content .modal-header h2 {
+    font-size: 0.9em !important; }
+  .comments-textarea:focus ~ .bar:before {
+    width: 50% !important; } }
+
+@media screen and (max-width: 375px) {
+  .comments-textarea {
+    width: 200px !important; } }

@@ -37,6 +37,10 @@
   </head>
 
   <body class="inside">
+     <div id="snackBar" class="snackbar-msg">
+      <span id="snackbarMsg"></span>
+      <span id="snackbarDismiss" class="snackbar-dismiss" role="button" aria-label="Dismiss Message" tabindex="0">DISMISS</span>
+     </div>
     <!-- Beginning header -->
     <header>
       <!-- Beginning nav -->
@@ -58,12 +62,16 @@
       <section id="restaurant-container">
         <div class="side-left"></div>
         <div id="restaurant-info">
+            
           <h2 tabindex="0" id="restaurant-name"></h2>
           <picture id="restaurant-pic">
             <source class="src-small-pic" media="(max-width: 426px)" />
             <img id="restaurant-img" />
           </picture>
           <p id="restaurant-cuisine"></p>
+          <div id="favoriteBtn">
+             
+          </div> 
           <h2 aria-hidden="true" id="restaurant-title"></h2>
           <p id="restaurant-address"></p>
           <div class="accordion-container">
@@ -83,10 +91,71 @@
       <section id="reviews-container">
         <div class="side-left"></div>
         <div id="reviews-content">
-          <img id="reviews-icon" src="img/review.svg" alt="" />
+        
+          <div class="reviews-head">
+            <button id="addReviewBtn" class="add-review-btn">
+               <span class="plus">&plus;</span>   <span class="add-text">Add Review</span></button>
+            <img id="reviews-icon" src="img/review.svg" alt="" />
+          </div>
           <ul id="reviews-list"></ul>
         </div>
         <div class="side-right"></div>
+            <!-- Add A Review Form / Modal -->
+      <div id="mainModal" class="modal">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h2 id="addReviewHeader">Review </h2>
+                  <div id="closeBtn" class="close-btn">
+                    &times;
+                  </div>
+                </div> 
+                <div class="modal-body">
+                  <form id="addReviewForm"  action="#!" class="addReview-form">
+                    <div class="form-row">
+                        <div class="form-group">   
+                            <input id="nameInput" name="name" type="text" required>
+                            <span class="bar"></span>
+                            <label  for="name">Name</label>
+                          </div>
+                          <div class="rating-select" data-rating="0">
+                            <span>
+                                <i  class="fas fa-star"></i>
+                            </span>
+                            <span>
+                                <i  class="fas fa-star"></i>
+                            </span>
+                            <span>
+                                <i  class="fas fa-star"></i>
+                            </span>
+                            <span>
+                                <i  class="fas fa-star"></i>
+                            </span>
+                            <span>
+                                <i  class="fas fa-star"></i>
+                            </span>
+                           <div id="selectRatingTxt"></div>
+                            <input id="ratingValue" name="rating" type="hidden" value="0">
+                          </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group-textarea">   
+                        <textarea id="commentsInput" required class="comments-textarea" name="comments" cols="40" rows="10"></textarea>
+                        <span class="bar"></span>
+                        <label  for="name">Tell us your thoughts..</label>
+                      </div>
+                      <div></div>
+                    </div>
+                   
+                     
+                      <div class="form-row btn">
+                        <input class="submitReview-btn" value="Submit" type="submit">
+                        <div></div>
+                      </div>
+                  </form>
+                </div>
+          </div>
+            
+          </div>
       </section>
       <!-- End reviews -->
       <!-- Beginning map -->
@@ -98,6 +167,7 @@
         ></div>
       </section>
       <!-- End Map -->
+      
     </main>
     <!-- End main -->
 
@@ -146,7 +216,7 @@
       type="application/javascript"
       charset="utf-8"
       src="js/sw/indexController.js"
-    ></script>
+    ></script> 
     <!-- Google Maps -->
     <!--
       <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_tKbW6A5pQ-eupxI56myUnHLqYCzOjKo&libraries=places&callback=initMap"></script>

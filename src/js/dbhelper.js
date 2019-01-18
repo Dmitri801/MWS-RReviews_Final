@@ -46,24 +46,36 @@ class DBHelper {
           .then(data => data.json())
           .then(reviewData => {
             networkDataRecieved = true;
-            console.log(reviewData);
+
             restaurant.reviews = reviewData;
             callback(null, restaurant);
           });
       })
       .catch(err => {
         if ("indexedDB" in window) {
-          readAllData("restaurants").then(data => {
-            if (!networkDataRecieved) {
-              data.forEach(restaurant => {
-                if (restaurant.id == id) {
-                  console.log("From Cache:", restaurant);
-
-                  callback(null, restaurant);
-                }
+          if (!networkDataRecieved) {
+            let restaurantObj = {};
+            readAllData("restaurants")
+              .then(restaurants => {
+                restaurants.forEach(restaurant => {
+                  if (restaurant.id == id) {
+                    restaurantObj = restaurant;
+                    restaurantObj.reviews = [];
+                  }
+                });
+              })
+              .then(() => {
+                readAllData("reviews").then(reviews => {
+                  reviews.forEach(review => {
+                    if (review.restaurant_id == id) {
+                      restaurantObj.reviews.push(review);
+                    }
+                  });
+                  console.log("From Cache:", restaurantObj);
+                  callback(null, restaurantObj);
+                });
               });
-            }
-          });
+          }
         }
       });
   }
