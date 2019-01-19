@@ -404,6 +404,7 @@ nav h1 a {
   position: relative;
   margin-right: auto;
   margin-left: 30px;
+  margin-bottom: 30px;
 }
 
 .fas.fa-heart {
@@ -758,6 +759,8 @@ input:focus ~ .bar:after {
   transition: 0.3s;
   border-top-right-radius: 7px;
   border-top-left-radius: 7px;
+  resize: none;
+  overflow: auto;
 }
 
 .comments-textarea:focus {
@@ -785,6 +788,10 @@ input:focus ~ .bar:after {
   top: 3px;
   font-size: 14px;
   color: $secondary-color;
+}
+
+.comments-textarea ~ label {
+  transition: 0.1s;
 }
 
 .comments-textarea:focus ~ .bar:before {
@@ -872,7 +879,7 @@ input:focus ~ .bar:after {
   -moz-box-shadow: 0 0 5px rbba(0, 0, 0, 0.4);
   box-shadow: 0 0 5px rbba(0, 0, 0, 0.4);
   opacity: 1;
-  transform: translateY(150px);
+  transform: translateY(250px);
 }
 
 .snackbar-msg.activate {
@@ -906,7 +913,7 @@ input:focus ~ .bar:after {
 @keyframes slideDown {
   0%,
   100% {
-    transform: translateY(150px);
+    transform: translateY(250px);
   }
   10%,
   90% {

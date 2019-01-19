@@ -5,13 +5,16 @@ const dbPromise = idb.open("restaurant-store", 1, db => {
   if (!db.objectStoreNames.contains("reviews")) {
     db.createObjectStore("reviews", { keyPath: "id" });
   }
+  if (!db.objectStoreNames.contains("syncData")) {
+    db.createObjectStore("syncData", { keyPath: "id" });
+  }
 });
 
-function writeData(st, dataToWrite) {
+function writeData(st, dataToWrite, primaryKey) {
   return dbPromise.then(db => {
     const tx = db.transaction(st, "readwrite");
     const store = tx.objectStore(st);
-    store.put(dataToWrite);
+    store.put(dataToWrite, primaryKey);
     return tx.complete;
   });
 }

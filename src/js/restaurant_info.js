@@ -185,46 +185,22 @@ fetchRestaurantFromURL = callback => {
  * Create restaurant HTML and add it to the webpage
  */
 fillRestaurantHTML = (restaurant = self.restaurant) => {
-  if (restaurant.is_favorite === "true" || true) {
+  if (restaurant.is_favorite == "true" || true) {
     const heartIcon = document.createElement("i");
     heartIcon.className = "fas fa-heart";
     heartIcon.style.color = "rgb(228, 39, 39)";
     heartIcon.addEventListener("click", () => {
-      fetch(
-        `http://localhost:1337/restaurants/${restaurant.id}/?is_favorite=false
-      `,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-      ).then(res => {
-        localStorage.setItem("unfavorite", res.status);
-        location.reload();
-      });
+      DBHelper.unfavoriteRestaurant(restaurant.id);
     });
     favoriteContainer.appendChild(heartIcon);
   }
 
-  if (restaurant.is_favorite !== "true" || false) {
+  if (restaurant.is_favorite == "false" || false) {
     const heartIcon = document.createElement("i");
     heartIcon.className = "fas fa-heart";
     heartIcon.style.color = "#ddd";
     heartIcon.addEventListener("click", () => {
-      fetch(
-        `http://localhost:1337/restaurants/${restaurant.id}/?is_favorite=true
-      `,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-      ).then(res => {
-        localStorage.setItem("favorite", res.status);
-        location.reload();
-      });
+      DBHelper.favoriteRestaurant(restaurant.id);
     });
     favoriteContainer.appendChild(heartIcon);
   }
@@ -464,6 +440,15 @@ function outsideModalClick(e) {
   }
 }
 
+// TextArea scroll listen
+commentsInput.addEventListener("scroll", event => {
+  if (commentsInput.scrollTop !== 0) {
+    document.querySelector('label[for="comments"]').style.opacity = 0;
+  } else if (commentsInput.scrollTop === 0) {
+    document.querySelector('label[for="comments"]').style.opacity = 1;
+  }
+});
+
 // Star rating select
 
 function setRating(event) {
@@ -493,6 +478,8 @@ addReviewForm.addEventListener("submit", e => {
   submitReviewForm();
 });
 
+function sendData() {}
+
 function submitReviewForm(restaurant = self.restaurant) {
   if (ratingInput.value == 0) {
     Toaster.show(snackBar, "Rating is required.", "error");
@@ -503,17 +490,22 @@ function submitReviewForm(restaurant = self.restaurant) {
       rating: parseInt(ratingInput.value),
       comments: commentsInput.value
     };
-    fetch(`http://localhost:1337/reviews`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(newReview)
-    }).then(res => {
-      if (res.status === 201) {
-        localStorage.setItem("postSuccess", res.status);
-        window.location.reload();
-      }
-    });
+    if ("serviceWorker" in navigator && "syncManager" in window) {
+      DBHelper.postNewReview(newReview);
+      // navigator.serviceWorker.ready.then(sw => {
+      //   writeData("syncData", newReview).then(() => {
+      //     return sw.sync
+      //       .register("sync-new-review")
+      //       .then(() => {
+      //         DBHelper.postNewReview(newReview);
+      //       })
+      //       .catch(err => {
+      //         console.log(err);
+      //       });
+      //   });
+      // });
+    } else {
+      DBHelper.postNewReview(newReview);
+    }
   }
 }

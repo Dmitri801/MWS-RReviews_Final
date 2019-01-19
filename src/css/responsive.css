@@ -55,8 +55,20 @@
   .modal-content .modal-header h2 {
     font-size: 0.9em !important; }
   .comments-textarea:focus ~ .bar:before {
-    width: 50% !important; } }
+    width: 50% !important; }
+  #favoriteBtn {
+    margin-left: 10px !important; }
+  .fas.fa-heart {
+    font-size: 30px !important; } }
 
 @media screen and (max-width: 375px) {
   .comments-textarea {
     width: 200px !important; } }
+
+@media screen and (max-width: 321px) {
+  #reviews-icon {
+    align-self: flex-start !important; }
+  .add-review-btn {
+    bottom: 0 !important; }
+  #restaurant-address {
+    text-align: center; } }

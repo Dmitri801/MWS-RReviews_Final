@@ -46,8 +46,8 @@ class DBHelper {
           .then(data => data.json())
           .then(reviewData => {
             networkDataRecieved = true;
-
             restaurant.reviews = reviewData;
+            writeData("restaurants", restaurant);
             callback(null, restaurant);
           });
       })
@@ -78,6 +78,61 @@ class DBHelper {
           }
         }
       });
+  }
+
+  static favoriteRestaurant(id) {
+    fetch(
+      `http://localhost:1337/restaurants/${id}/?is_favorite=true
+    `,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    )
+      .then(res => {
+        return res.json();
+      })
+      .then(restaurant => {
+        localStorage.setItem("favorite", restaurant);
+        location.reload();
+      });
+  }
+
+  static unfavoriteRestaurant(id) {
+    fetch(
+      `http://localhost:1337/restaurants/${id}/?is_favorite=false
+    `,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    )
+      .then(res => {
+        return res.json();
+      })
+      .then(restaurant => {
+        localStorage.setItem("unfavorite", restaurant);
+        location.reload();
+      });
+  }
+
+  static postNewReview(newReview) {
+    fetch(`http://localhost:1337/reviews`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newReview)
+    }).then(res => {
+      if (res.status === 201) {
+        localStorage.setItem("postSuccess", res.status);
+        window.location.reload();
+      }
+    });
   }
 
   /**

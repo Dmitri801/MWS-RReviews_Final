@@ -21,9 +21,9 @@
           "Sunday": "12:00 pm - 4:00 pm, 5:30 pm - 11:00 pm"
         },
         "createdAt": 1504095563444,
-        "updatedAt": "2019-01-18T20:43:54.040Z",
+        "updatedAt": "2019-01-19T17:01:47.800Z",
         "id": 1,
-        "is_favorite": "false"
+        "is_favorite": "true"
       },
       {
         "name": "Emily",
@@ -45,8 +45,8 @@
           "Sunday": "12:00 pm - 3:00 pm, 5:00 pm - 11:00 pm"
         },
         "createdAt": 1504095568414,
-        "updatedAt": "2017-09-14T14:05:54.800Z",
-        "is_favorite": false,
+        "updatedAt": "2019-01-19T19:34:54.536Z",
+        "is_favorite": "true",
         "id": 2
       },
       {
@@ -69,8 +69,9 @@
           "Sunday": "11:30 am - 2:00 am"
         },
         "createdAt": 1504095571434,
-        "updatedAt": 1504095571434,
-        "id": 3
+        "updatedAt": "2019-01-19T17:59:51.927Z",
+        "id": 3,
+        "is_favorite": "true"
       },
       {
         "name": "Katz's Delicatessen",
@@ -116,8 +117,8 @@
           "Sunday": "10:00 am - 12:00 am"
         },
         "createdAt": 1504095567071,
-        "updatedAt": "2019-01-18T20:43:45.213Z",
-        "is_favorite": "false",
+        "updatedAt": "2019-01-19T17:00:45.310Z",
+        "is_favorite": "true",
         "id": 5
       },
       {
@@ -140,8 +141,8 @@
           "Sunday": "12:00 pm - 9:00 pm"
         },
         "createdAt": 1504095567071,
-        "updatedAt": 1504095567071,
-        "is_favorite": false,
+        "updatedAt": "2019-01-19T19:26:12.827Z",
+        "is_favorite": "true",
         "id": 6
       },
       {
@@ -188,7 +189,7 @@
           "Sunday": "10:00 am - 3:00 pm, 5:30 pm - 11:00 pm"
         },
         "createdAt": 1504095567091,
-        "updatedAt": "2019-01-18T20:30:34.083Z",
+        "updatedAt": "2019-01-19T17:30:00.204Z",
         "is_favorite": "true",
         "id": 8
       },
@@ -573,6 +574,42 @@
         "createdAt": "2019-01-18T20:00:45.256Z",
         "updatedAt": "2019-01-18T20:00:45.256Z",
         "id": 45
+      },
+      {
+        "restaurant_id": 5,
+        "name": "Roberta",
+        "rating": 5,
+        "comments": "Oh I love it so much... and no i don't actually own this  restaurant... ",
+        "createdAt": "2019-01-19T16:45:15.094Z",
+        "updatedAt": "2019-01-19T16:45:15.094Z",
+        "id": 46
+      },
+      {
+        "restaurant_id": 3,
+        "name": "Mike",
+        "rating": 5,
+        "comments": "Kang Ho Dong Baekjeong did not disappoint. Fresh food, great variety and a friendly staff, and the restaurant was clean to boot. We'll definitely be back!",
+        "createdAt": "2019-01-19T18:06:06.972Z",
+        "updatedAt": "2019-01-19T18:06:06.972Z",
+        "id": 47
+      },
+      {
+        "restaurant_id": 6,
+        "name": "Leticia",
+        "rating": 3,
+        "comments": "The staff is so friendly and helpful. The establishment is clean and set up nicely. \nBeware that they only have two menus though and the all you can eat is basically the common denominator for both. I was naive and thought they would have other options but I was wrong. \nI tried quite a few different things and out of all of them there were about 4 items I really did not care for. I don't think I'll be back because it's just not worth spending $25 all you can eat for only 2 or 3 items I liked. My partner says if they had more marinades and variety it would probably be better.",
+        "createdAt": "2019-01-19T18:41:49.994Z",
+        "updatedAt": "2019-01-19T18:41:49.994Z",
+        "id": 48
+      },
+      {
+        "restaurant_id": 2,
+        "name": "Tracy",
+        "rating": 5,
+        "comments": "Emily is one of my favorite pizza places. It's nothing fancy - you order a pizza from either the menu or you can make your own and have 2 crusts to choose from. I've been to these kind of places before but none of them have the same type of delicious crust.  The toppings are top quality and plentiful. The staff is always nice and the owner is always there ensuring quality and top service",
+        "createdAt": "2019-01-19T19:35:14.132Z",
+        "updatedAt": "2019-01-19T19:35:14.132Z",
+        "id": 49
       }
     ]
   },
@@ -628,7 +665,7 @@
       "id": 10
     },
     "reviews": {
-      "id": 45
+      "id": 49
     }
   }
 }
