@@ -26,3 +26,16 @@ function readAllData(st) {
     return store.getAll();
   });
 }
+
+function deleteItemFromData(st, key) {
+  return dbPromise
+    .then(db => {
+      const tx = db.transaction(st, "readwrite");
+      const store = tx.objectStore(st);
+      store.delete(key);
+      return tx.complete;
+    })
+    .then(() => {
+      console.log("Item Deleted");
+    });
+}

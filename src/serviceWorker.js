@@ -86,3 +86,39 @@ self.addEventListener("fetch", event => {
     );
   }
 });
+
+// Call sync event
+
+self.addEventListener("sync", event => {
+  console.log("[Service Worker] background syncing..", event);
+  if (event.tag === "syncNewReview") {
+    console.log("[Service Worker] syncing new review");
+    event.waitUntil(
+      readAllData("syncData").then(syncedData => {
+        for (let newData of syncedData) {
+          fetch(`http://localhost:1337/reviews`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              id: newData.id,
+              restaurant_id: newData.restaurant_id,
+              name: newData.name,
+              rating: newData.rating,
+              comments: newData.comments
+            })
+          })
+            .then(res => {
+              res.json().then(resData => {
+                if (res.ok) {
+                  deleteItemFromData("syncData", resData.id);
+                }
+              });
+            })
+            .catch(err => console.log(err));
+        }
+      })
+    );
+  }
+});

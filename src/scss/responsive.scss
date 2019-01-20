@@ -71,15 +71,19 @@
     min-width: 20% !important;
   }
 
+  .modal-content {
+    width: 90% !important;
+  }
+
   input[name="name"] {
-    width: 200px !important;
+    width: 270px !important;
   }
 
   .comments-textarea {
-    width: 250px !important;
+    width: 300px !important;
   }
   .form-row.btn {
-    width: 200px !important;
+    width: 230px !important;
   }
   .modal-content .modal-header h2 {
     font-size: 0.9em !important;
@@ -93,15 +97,13 @@
   .fas.fa-heart {
     font-size: 30px !important;
   }
-}
 
-@media screen and (max-width: 375px) {
-  .comments-textarea {
-    width: 200px !important;
+  .snackbar-msg {
+    font-size: 17px !important;
   }
 }
 
-@media screen and (max-width: 321px) {
+@media screen and (max-width: 376px) {
   #reviews-icon {
     align-self: flex-start !important;
   }
@@ -110,5 +112,11 @@
   }
   #restaurant-address {
     text-align: center;
+  }
+  .comments-textarea {
+    width: 250px !important;
+  }
+  .snackbar-dismiss {
+    display: none;
   }
 }

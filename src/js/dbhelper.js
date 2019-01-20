@@ -80,7 +80,7 @@ class DBHelper {
       });
   }
 
-  static favoriteRestaurant(id) {
+  static favoriteRestaurant(id, callback) {
     fetch(
       `http://localhost:1337/restaurants/${id}/?is_favorite=true
     `,
@@ -95,12 +95,11 @@ class DBHelper {
         return res.json();
       })
       .then(restaurant => {
-        localStorage.setItem("favorite", restaurant);
-        location.reload();
+        callback();
       });
   }
 
-  static unfavoriteRestaurant(id) {
+  static unfavoriteRestaurant(id, callback) {
     fetch(
       `http://localhost:1337/restaurants/${id}/?is_favorite=false
     `,
@@ -115,12 +114,11 @@ class DBHelper {
         return res.json();
       })
       .then(restaurant => {
-        localStorage.setItem("unfavorite", restaurant);
-        location.reload();
+        callback();
       });
   }
 
-  static postNewReview(newReview) {
+  static postNewReview(newReview, callback) {
     fetch(`http://localhost:1337/reviews`, {
       method: "POST",
       headers: {
@@ -129,8 +127,7 @@ class DBHelper {
       body: JSON.stringify(newReview)
     }).then(res => {
       if (res.status === 201) {
-        localStorage.setItem("postSuccess", res.status);
-        window.location.reload();
+        callback();
       }
     });
   }

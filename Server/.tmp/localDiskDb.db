@@ -45,8 +45,8 @@
           "Sunday": "12:00 pm - 3:00 pm, 5:00 pm - 11:00 pm"
         },
         "createdAt": 1504095568414,
-        "updatedAt": "2019-01-19T19:34:54.536Z",
-        "is_favorite": "true",
+        "updatedAt": "2019-01-20T16:17:37.876Z",
+        "is_favorite": "false",
         "id": 2
       },
       {
@@ -189,7 +189,7 @@
           "Sunday": "10:00 am - 3:00 pm, 5:30 pm - 11:00 pm"
         },
         "createdAt": 1504095567091,
-        "updatedAt": "2019-01-19T17:30:00.204Z",
+        "updatedAt": "2019-01-20T16:02:41.420Z",
         "is_favorite": "true",
         "id": 8
       },
@@ -610,6 +610,141 @@
         "createdAt": "2019-01-19T19:35:14.132Z",
         "updatedAt": "2019-01-19T19:35:14.132Z",
         "id": 49
+      },
+      {
+        "id": 1547948393930,
+        "restaurant_id": 1,
+        "name": "Jack",
+        "rating": 5,
+        "comments": "Fantastic!",
+        "createdAt": "2019-01-20T01:40:13.672Z",
+        "updatedAt": "2019-01-20T01:40:13.672Z"
+      },
+      {
+        "id": 1547951276614,
+        "restaurant_id": 1,
+        "name": "Doug",
+        "rating": 5,
+        "comments": "Fast, Incredibly friendly staff(might be the best I've been around), prices are reasonable and food is great.  Recommend this place highly.",
+        "createdAt": "2019-01-20T02:27:56.684Z",
+        "updatedAt": "2019-01-20T02:27:56.684Z"
+      },
+      {
+        "id": 1547951673692,
+        "restaurant_id": 7,
+        "name": "Robert",
+        "rating": 4,
+        "comments": "A nice find while in the area and helps when there are good reviews on the joint before entering!  I ordered the double flame burger with lettuce wrap.  Nice crisp lettuce, tomato slice, onion slice, with juicy patties.  Nice flavor.  I got the combo that includes Steak Fries.  The Steak Fries came out crispy without me asking!",
+        "createdAt": "2019-01-20T02:34:33.719Z",
+        "updatedAt": "2019-01-20T02:34:33.719Z"
+      },
+      {
+        "id": 1547951920314,
+        "restaurant_id": 3,
+        "name": "Chelsey",
+        "rating": 3,
+        "comments": "To compensate for the larger quantity of food they would be giving, the quality of the meats/seafood/stews weren't  very good. It's the downfall of many buffets and all you can eats. The bulgogi was very chewy and sweet, the stew was very over salted, and the shrimp did not smell very fresh. Some upsides to this place was the japchae and panchan buffet. I deeply appreciate them keeping the japchae salty and not drenching it in the sweet EJO sauce. The kimchi was not very sour nor spicy, but the potatoes and broccoli were good for panchan. ",
+        "createdAt": "2019-01-20T02:38:54.364Z",
+        "updatedAt": "2019-01-20T02:38:54.364Z"
+      },
+      {
+        "id": 1547952428066,
+        "restaurant_id": 2,
+        "name": "Dave",
+        "rating": 1,
+        "comments": "Just ordered a pie w/ pineapple and ham, wings, and soda. Received a pie with pepperoni and sausage, a sandwich, and a soda. Called a couple of times, line was busy. Called again, ranging through and disconnected.",
+        "createdAt": "2019-01-20T02:47:17.386Z",
+        "updatedAt": "2019-01-20T02:47:17.386Z"
+      },
+      {
+        "id": 1547952966140,
+        "restaurant_id": 5,
+        "name": "Courtnie",
+        "rating": 5,
+        "comments": "How lucky am I that we are neighbors? Ohmahgawsh. \nReally good pizza that even my little man, the pickiest wee one in all the land, gets super excited for.\nHe also commends the great service and has so much fun when he gets to talk to the manager.",
+        "createdAt": "2019-01-20T02:56:20.424Z",
+        "updatedAt": "2019-01-20T02:56:20.424Z"
+      },
+      {
+        "id": 1547995638345,
+        "restaurant_id": 4,
+        "name": "Rebecca",
+        "rating": 4,
+        "comments": "Special occasion dining, it probably is not. But everyday dining with a chill atmosphere and something different than a regular or burger or sandwich joint, it definitely is. It's super convenient, and has plenty of parking (which can be a rarity these days in this area) so I say, throw this into the rotation.",
+        "createdAt": "2019-01-20T14:47:18.431Z",
+        "updatedAt": "2019-01-20T14:47:18.431Z"
+      },
+      {
+        "id": 1547995971241,
+        "restaurant_id": 5,
+        "name": "Julie",
+        "rating": 5,
+        "comments": "Oh Roberta's Pizza how I love you. You met all my expectations and then some!",
+        "createdAt": "2019-01-20T14:52:51.276Z",
+        "updatedAt": "2019-01-20T14:52:51.276Z"
+      },
+      {
+        "id": 1547996141926,
+        "restaurant_id": 6,
+        "name": "Brandon",
+        "rating": 2,
+        "comments": "Hadn't been here in years and decided \"damn, they use to have pretty good food\" so we drove over and dined in....big mistake.  Should have know when the parking lot was empty.  Not only are the prices pretty steep, the food flat sucked.    Over cooked ribs, cold chicken and sides.  The brisket was ok but nothing to rave about.",
+        "createdAt": "2019-01-20T14:55:41.971Z",
+        "updatedAt": "2019-01-20T14:55:41.971Z"
+      },
+      {
+        "id": 1547996233252,
+        "restaurant_id": 6,
+        "name": "Janet",
+        "rating": 4,
+        "comments": "I recently had Hometown BBQ catered to my office and it was delicious.  Probably the leanest meats of any BBQ spot I have tried in New York.\n\nDelicious and high quality sides too.  Baked beans are amazing!! ",
+        "createdAt": "2019-01-20T14:57:13.291Z",
+        "updatedAt": "2019-01-20T14:57:13.291Z"
+      },
+      {
+        "id": 1547996396858,
+        "restaurant_id": 6,
+        "name": "Fancy",
+        "rating": 1,
+        "comments": "I went to Joe Morley's tonight and I have to say I was very disappointed with the service and the food. The food was cold and tasted bad. They got the order wrong twice so they offered us free stuff and then proceeded to take it away. our waitress told us she never read the menu and when there was a mixup for the second time, she said the menu was misleading when in fact she had messed up the order. When we received our food, it made me and my family sick. it just made me very sad to see a place I really like go down the drain this way ",
+        "createdAt": "2019-01-20T14:59:56.888Z",
+        "updatedAt": "2019-01-20T14:59:56.888Z"
+      },
+      {
+        "id": 1547996625814,
+        "restaurant_id": 1,
+        "name": "Ted",
+        "rating": 5,
+        "comments": "My wife and I have been looking for 2 years for a new Chinese restaurant since her last place went down the toilet and lo and behold we found it! Highly recommend Mission Chinese Food especially if you like sweet and sour pork sesame chicken and deep fried dishes like that. My first visit best",
+        "createdAt": "2019-01-20T15:04:02.498Z",
+        "updatedAt": "2019-01-20T15:04:02.498Z"
+      },
+      {
+        "id": 1547996939742,
+        "restaurant_id": 4,
+        "name": "Johnny",
+        "rating": 2,
+        "comments": "Not that great, I liked the atmosphere. The food was not that good though..",
+        "createdAt": "2019-01-20T15:08:59.777Z",
+        "updatedAt": "2019-01-20T15:08:59.777Z"
+      },
+      {
+        "id": 1547997104525,
+        "restaurant_id": 7,
+        "name": "Tanua",
+        "rating": 5,
+        "comments": "I loved it! Superior indeed!! ",
+        "createdAt": "2019-01-20T15:11:44.539Z",
+        "updatedAt": "2019-01-20T15:11:44.539Z"
+      },
+      {
+        "id": 1547998271501,
+        "restaurant_id": 8,
+        "name": "Melissa",
+        "rating": 5,
+        "comments": "I've been coming to this store since I was a girl and now bring my boys now that I live in the area.\n\nSo many feels when walking into this place.\n\nThe customer service is friendly and kind. \n\nThe sweets and treats are delicious.\n\nThe sandwiches and deli are tops. \n\nBecoming a frequent shopper.",
+        "createdAt": "2019-01-20T15:31:23.883Z",
+        "updatedAt": "2019-01-20T15:31:23.883Z"
       }
     ]
   },
@@ -665,7 +800,7 @@
       "id": 10
     },
     "reviews": {
-      "id": 49
+      "id": 1547998271501
     }
   }
 }

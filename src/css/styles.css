@@ -391,6 +391,9 @@ nav h1 a {
 .fas.fa-heart:hover {
   color: #e42727 !important; }
 
+.fas.fa-heart.favorite {
+  color: #e42727 !important; }
+
 .accordion-container {
   display: grid;
   grid-auto-rows: minmax(auto);
@@ -636,7 +639,7 @@ input[name="name"] {
   border-bottom: 1px solid #ddd;
   background: #fff;
   font-weight: 400;
-  transition: 0.3s;
+  transition: 0.2s;
   border-top-right-radius: 7px;
   border-top-left-radius: 7px; }
 
@@ -697,7 +700,8 @@ input:focus ~ .bar:after {
   border-top-right-radius: 7px;
   border-top-left-radius: 7px;
   resize: none;
-  overflow: auto; }
+  overflow: auto;
+  transition: 0.2s; }
 
 .comments-textarea:focus {
   outline: none; }
@@ -719,10 +723,8 @@ input:focus ~ .bar:after {
 .comments-textarea:valid ~ label {
   top: 3px;
   font-size: 14px;
-  color: #9a4e12; }
-
-.comments-textarea ~ label {
-  transition: 0.1s; }
+  color: #9a4e12;
+  transition: 0.4s ease all; }
 
 .comments-textarea:focus ~ .bar:before {
   width: 51%; }

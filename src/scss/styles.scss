@@ -419,6 +419,10 @@ nav h1 a {
   color: rgb(228, 39, 39) !important;
 }
 
+.fas.fa-heart.favorite {
+  color: rgb(228, 39, 39) !important;
+}
+
 .accordion-container {
   display: grid;
   grid-auto-rows: minmax(auto);
@@ -687,7 +691,7 @@ input[name="name"] {
   border-bottom: 1px solid #ddd;
   background: #fff;
   font-weight: 400;
-  transition: 0.3s;
+  transition: 0.2s;
   border-top-right-radius: 7px;
   border-top-left-radius: 7px;
 }
@@ -761,6 +765,7 @@ input:focus ~ .bar:after {
   border-top-left-radius: 7px;
   resize: none;
   overflow: auto;
+  transition: 0.2s;
 }
 
 .comments-textarea:focus {
@@ -779,7 +784,6 @@ input:focus ~ .bar:after {
   pointer-events: none;
   left: 10px;
   top: 15px;
-
   transition: 0.4s ease all;
 }
 
@@ -788,10 +792,7 @@ input:focus ~ .bar:after {
   top: 3px;
   font-size: 14px;
   color: $secondary-color;
-}
-
-.comments-textarea ~ label {
-  transition: 0.1s;
+  transition: 0.4s ease all;
 }
 
 .comments-textarea:focus ~ .bar:before {
