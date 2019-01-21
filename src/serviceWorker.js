@@ -121,4 +121,63 @@ self.addEventListener("sync", event => {
       })
     );
   }
+
+  if (event.tag === "syncFavorite") {
+    console.log("[Service Worker] syncing favorite request");
+    event.waitUntil(
+      readAllData("syncData").then(syncedData => {
+        for (let newData of syncedData) {
+          fetch(
+            `http://localhost:1337/restaurants/${
+              newData.restaurantId
+            }/?is_favorite=true`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json"
+              }
+            }
+          )
+            .then(res => {
+              res.json().then(resData => {
+                if (res.ok) {
+                  console.log(resData, newData.id);
+                  deleteItemFromData("syncData", newData.id);
+                }
+              });
+            })
+            .catch(err => console.log(err));
+        }
+      })
+    );
+  }
+  if (event.tag === "syncUnfavorite") {
+    console.log("[Service Worker] syncing unfavorite request");
+    event.waitUntil(
+      readAllData("syncData").then(syncedData => {
+        for (let newData of syncedData) {
+          fetch(
+            `http://localhost:1337/restaurants/${
+              newData.restaurantId
+            }/?is_favorite=false`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json"
+              }
+            }
+          )
+            .then(res => {
+              res.json().then(resData => {
+                if (res.ok) {
+                  console.log(resData, newData.id);
+                  deleteItemFromData("syncData", newData.id);
+                }
+              });
+            })
+            .catch(err => console.log(err));
+        }
+      })
+    );
+  }
 });

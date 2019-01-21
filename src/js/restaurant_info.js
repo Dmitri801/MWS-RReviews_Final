@@ -14,6 +14,7 @@ const favoriteContainer = document.getElementById("favoriteBtn");
 const snackBar = document.getElementById("snackBar");
 const snackBarMsg = document.getElementById("snackbarMsg");
 const snackBarDismiss = document.getElementById("snackbarDismiss");
+const heartIcon = document.createElement("i");
 let restaurant;
 var newMap;
 
@@ -55,16 +56,6 @@ document.addEventListener("DOMContentLoaded", event => {
   const restInfoDiv = document.querySelector("#restaurant-info");
   const mapSection = document.createElement("section");
   const mapDiv = document.createElement("div");
-
-  if (localStorage.getItem("unfavorite")) {
-    Toaster.show(snackBar, "Restaurant removed from favorites", "success");
-    localStorage.removeItem("unfavorite");
-  }
-
-  if (localStorage.getItem("favorite")) {
-    Toaster.show(snackBar, "Restaurant added to favorites", "success");
-    localStorage.removeItem("favorite");
-  }
 
   if (window.innerWidth < 949 && map !== null) {
     mainContent.removeChild(map);
@@ -177,41 +168,102 @@ fetchRestaurantFromURL = callback => {
   }
 };
 
+function favoriteRestaurantSync(restaurantId) {
+  const favoriteData = {
+    id: Date.now(),
+    restaurantId
+  };
+  if ("serviceWorker" in navigator && "SyncManager" in window) {
+    navigator.serviceWorker.ready.then(sw => {
+      writeData("syncData", favoriteData).then(data => {
+        return sw.sync
+          .register("syncFavorite")
+          .then(() => {
+            if (!navigator.onLine) {
+              Toaster.show(
+                snackBar,
+                "You have no internet! We'll send the request when there's a connection 🤗 ",
+                "error"
+              );
+              heartIcon.classList.add("favorite");
+            } else {
+              heartIcon.classList.add("favorite");
+              Toaster.show(
+                snackBar,
+                "Restaurant added to favorites!",
+                "success"
+              );
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      });
+    });
+  } else {
+    DBHelper.favoriteRestaurant(restaurantId, () => {
+      console.log("Background Sync Unsupported");
+      heartIcon.classList.add("favorite");
+      Toaster.show(snackBar, "Restaurant added to favorites!", "success");
+    });
+  }
+}
+
+function unfavoriteRestaurantSync(restaurantId) {
+  const unfavoriteData = {
+    id: Date.now(),
+    restaurantId
+  };
+  if ("serviceWorker" in navigator && "SyncManager" in window) {
+    navigator.serviceWorker.ready.then(sw => {
+      writeData("syncData", unfavoriteData).then(data => {
+        return sw.sync
+          .register("syncUnfavorite")
+          .then(() => {
+            if (!navigator.onLine) {
+              Toaster.show(
+                snackBar,
+                "You have no internet! We'll send the request when there's a connection 🤗 ",
+                "error"
+              );
+              heartIcon.classList.remove("favorite");
+            } else {
+              heartIcon.classList.remove("favorite");
+              Toaster.show(
+                snackBar,
+                "Restaurant removed from favorites!",
+                "success"
+              );
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      });
+    });
+  } else {
+    DBHelper.unfavoriteRestaurant(restaurantId, () => {
+      heartIcon.classList.remove("favorite");
+      Toaster.show(snackBar, "Restaurant removed from favorites!", "success");
+    });
+  }
+}
+
 /**
  * Create restaurant HTML and add it to the webpage
  */
 fillRestaurantHTML = (restaurant = self.restaurant) => {
-  const heartIcon = document.createElement("i");
   if (
     restaurant.is_favorite == "true" ||
-    true ||
     heartIcon.classList.contains("favorite")
   ) {
     heartIcon.className = "fas fa-heart";
     heartIcon.classList.add("favorite");
     heartIcon.addEventListener("click", () => {
-      if (navigator.onLine) {
-        if (heartIcon.classList.contains("favorite")) {
-          DBHelper.unfavoriteRestaurant(restaurant.id, () => {
-            heartIcon.classList.remove("favorite");
-            Toaster.show(
-              snackBar,
-              "Restaurant removed from favorites!",
-              "success"
-            );
-          });
-        } else {
-          DBHelper.favoriteRestaurant(restaurant.id, () => {
-            heartIcon.classList.add("favorite");
-            Toaster.show(snackBar, "Restaurant added to favorites!", "success");
-          });
-        }
+      if (heartIcon.classList.contains("favorite")) {
+        unfavoriteRestaurantSync(restaurant.id);
       } else {
-        Toaster.show(
-          snackBar,
-          "You need to have internet connection to favorite/unfavorite",
-          "error"
-        );
+        favoriteRestaurantSync(restaurant.id);
       }
     });
     favoriteContainer.appendChild(heartIcon);
@@ -225,28 +277,10 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
     heartIcon.className = "fas fa-heart";
     heartIcon.classList.remove("favorite");
     heartIcon.addEventListener("click", () => {
-      if (navigator.onLine) {
-        if (!heartIcon.classList.contains("favorite")) {
-          DBHelper.favoriteRestaurant(restaurant.id, () => {
-            heartIcon.classList.add("favorite");
-            Toaster.show(snackBar, "Restaurant added to favorites!", "success");
-          });
-        } else {
-          DBHelper.unfavoriteRestaurant(restaurant.id, () => {
-            heartIcon.classList.remove("favorite");
-            Toaster.show(
-              snackBar,
-              "Restaurant removed from favorites!",
-              "success"
-            );
-          });
-        }
+      if (!heartIcon.classList.contains("favorite")) {
+        favoriteRestaurantSync(restaurant.id);
       } else {
-        Toaster.show(
-          snackBar,
-          "You need to have internet connection to favorite/unfavorite",
-          "error"
-        );
+        unfavoriteRestaurantSync(restaurant.id);
       }
     });
     favoriteContainer.appendChild(heartIcon);
@@ -282,6 +316,109 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   // fill reviews
   fillReviewsHTML();
 };
+
+// fillRestaurantHTML = (restaurant = self.restaurant) => {
+//   const heartIcon = document.createElement("i");
+//   if (
+//     restaurant.is_favorite == "true" ||
+//     true ||
+//     heartIcon.classList.contains("favorite")
+//   ) {
+//     heartIcon.className = "fas fa-heart";
+//     heartIcon.classList.add("favorite");
+//     heartIcon.addEventListener("click", () => {
+//       if (navigator.onLine) {
+//         if (heartIcon.classList.contains("favorite")) {
+//           DBHelper.unfavoriteRestaurant(restaurant.id, () => {
+//             heartIcon.classList.remove("favorite");
+//             Toaster.show(
+//               snackBar,
+//               "Restaurant removed from favorites!",
+//               "success"
+//             );
+//           });
+//         } else {
+//           DBHelper.favoriteRestaurant(restaurant.id, () => {
+//             heartIcon.classList.add("favorite");
+//             Toaster.show(snackBar, "Restaurant added to favorites!", "success");
+//           });
+//         }
+//       } else {
+//         Toaster.show(
+//           snackBar,
+//           "You need to have internet connection to favorite/unfavorite",
+//           "error"
+//         );
+//       }
+//     });
+//     favoriteContainer.appendChild(heartIcon);
+//   }
+
+//   if (
+//     restaurant.is_favorite == "false" ||
+//     false ||
+//     !heartIcon.classList.contains("favorite")
+//   ) {
+//     heartIcon.className = "fas fa-heart";
+//     heartIcon.classList.remove("favorite");
+//     heartIcon.addEventListener("click", () => {
+//       if (navigator.onLine) {
+//         if (!heartIcon.classList.contains("favorite")) {
+//           DBHelper.favoriteRestaurant(restaurant.id, () => {
+//             heartIcon.classList.add("favorite");
+//             Toaster.show(snackBar, "Restaurant added to favorites!", "success");
+//           });
+//         } else {
+//           DBHelper.unfavoriteRestaurant(restaurant.id, () => {
+//             heartIcon.classList.remove("favorite");
+//             Toaster.show(
+//               snackBar,
+//               "Restaurant removed from favorites!",
+//               "success"
+//             );
+//           });
+//         }
+//       } else {
+//         Toaster.show(
+//           snackBar,
+//           "You need to have internet connection to favorite/unfavorite",
+//           "error"
+//         );
+//       }
+//     });
+//     favoriteContainer.appendChild(heartIcon);
+//   }
+//   const name = document.getElementById("restaurant-name");
+//   name.innerHTML = restaurant.name;
+
+//   const address = document.getElementById("restaurant-address");
+//   address.innerHTML = `<i id="address-icon" class="fas fa-map-marker-alt"></i> ${
+//     restaurant.address
+//   }`;
+//   const title = document.getElementById("restaurant-title");
+//   title.innerHTML = restaurant.name;
+//   title.setAttribute("tabindex", "-1");
+//   const smallImgSrc = document.querySelector(".src-small-pic");
+//   smallImgSrc.setAttribute("srcset", `/images/${restaurant.id}-small.jpg`);
+//   const image = document.getElementById("restaurant-img");
+//   image.className = "restaurant-img";
+//   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+//   image.setAttribute("alt", `Image for ${restaurant.name}`);
+
+//   const cuisine = document.getElementById("restaurant-cuisine");
+//   cuisine.innerHTML = restaurant.cuisine_type;
+
+//   // Add title to review form
+//   const reviewFormHeader = document.getElementById("addReviewHeader");
+//   reviewFormHeader.innerHTML += restaurant.name;
+
+//   // fill operating hours
+//   if (restaurant.operating_hours) {
+//     fillRestaurantHoursHTML();
+//   }
+//   // fill reviews
+//   fillReviewsHTML();
+// };
 
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.

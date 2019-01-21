@@ -45,7 +45,7 @@
           "Sunday": "12:00 pm - 3:00 pm, 5:00 pm - 11:00 pm"
         },
         "createdAt": 1504095568414,
-        "updatedAt": "2019-01-20T16:17:37.876Z",
+        "updatedAt": "2019-01-21T15:42:23.129Z",
         "is_favorite": "false",
         "id": 2
       },
@@ -69,7 +69,7 @@
           "Sunday": "11:30 am - 2:00 am"
         },
         "createdAt": 1504095571434,
-        "updatedAt": "2019-01-19T17:59:51.927Z",
+        "updatedAt": "2019-01-21T14:06:21.315Z",
         "id": 3,
         "is_favorite": "true"
       },
@@ -93,8 +93,8 @@
           "Sunday": "Sat - 10:30 pm"
         },
         "createdAt": 1504095567091,
-        "updatedAt": 1504095567091,
-        "is_favorite": false,
+        "updatedAt": "2019-01-21T03:37:00.356Z",
+        "is_favorite": "true",
         "id": 4
       },
       {
@@ -117,7 +117,7 @@
           "Sunday": "10:00 am - 12:00 am"
         },
         "createdAt": 1504095567071,
-        "updatedAt": "2019-01-19T17:00:45.310Z",
+        "updatedAt": "2019-01-21T15:30:32.715Z",
         "is_favorite": "true",
         "id": 5
       },
@@ -141,8 +141,8 @@
           "Sunday": "12:00 pm - 9:00 pm"
         },
         "createdAt": 1504095567071,
-        "updatedAt": "2019-01-19T19:26:12.827Z",
-        "is_favorite": "true",
+        "updatedAt": "2019-01-21T15:11:16.654Z",
+        "is_favorite": "false",
         "id": 6
       },
       {
@@ -745,6 +745,34 @@
         "comments": "I've been coming to this store since I was a girl and now bring my boys now that I live in the area.\n\nSo many feels when walking into this place.\n\nThe customer service is friendly and kind. \n\nThe sweets and treats are delicious.\n\nThe sandwiches and deli are tops. \n\nBecoming a frequent shopper.",
         "createdAt": "2019-01-20T15:31:23.883Z",
         "updatedAt": "2019-01-20T15:31:23.883Z"
+      },
+      {
+        "id": 1548083343435,
+        "createdAt": "2019-01-21T15:09:53.903Z",
+        "updatedAt": "2019-01-21T15:09:53.903Z"
+      },
+      {
+        "id": 1548083381223,
+        "restaurant_id": 6,
+        "name": "Mandy",
+        "rating": 5,
+        "comments": "Felt like home eating their amazing ribs! ",
+        "createdAt": "2019-01-21T15:09:53.916Z",
+        "updatedAt": "2019-01-21T15:09:53.916Z"
+      },
+      {
+        "id": 1548083426723,
+        "createdAt": "2019-01-21T15:11:16.636Z",
+        "updatedAt": "2019-01-21T15:11:16.636Z"
+      },
+      {
+        "id": 1548083464427,
+        "restaurant_id": 6,
+        "name": "Tony",
+        "rating": 2,
+        "comments": "I've had better BBQ when McDonalds is running that one McRib sandwhich",
+        "createdAt": "2019-01-21T15:11:16.638Z",
+        "updatedAt": "2019-01-21T15:11:16.638Z"
       }
     ]
   },
@@ -800,7 +828,7 @@
       "id": 10
     },
     "reviews": {
-      "id": 1547998271501
+      "id": 1548083464427
     }
   }
 }

@@ -389,7 +389,7 @@ nav h1 a {
   cursor: pointer; }
 
 .fas.fa-heart:hover {
-  color: #e42727 !important; }
+  text-shadow: 0 0 2px rgba(228, 39, 39, 0.9) !important; }
 
 .fas.fa-heart.favorite {
   color: #e42727 !important; }
@@ -795,8 +795,7 @@ input:focus ~ .bar:after {
   border-radius: 5px;
   overflow: hidden;
   transition: 0.1s;
-  -moz-box-shadow: 0 0 5px rbba(0, 0, 0, 0.4);
-  box-shadow: 0 0 5px rbba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   opacity: 1;
   transform: translateY(250px); }
 
