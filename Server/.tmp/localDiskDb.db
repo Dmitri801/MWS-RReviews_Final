@@ -45,8 +45,8 @@
           "Sunday": "12:00 pm - 3:00 pm, 5:00 pm - 11:00 pm"
         },
         "createdAt": 1504095568414,
-        "updatedAt": "2019-01-25T01:17:31.199Z",
-        "is_favorite": "true",
+        "updatedAt": "2019-01-25T04:50:05.146Z",
+        "is_favorite": "false",
         "id": 2
       },
       {
@@ -213,8 +213,8 @@
           "Sunday": "5:00 pm - 10:00 pm"
         },
         "createdAt": 1504095567191,
-        "updatedAt": "2019-01-18T20:11:32.015Z",
-        "is_favorite": "false",
+        "updatedAt": "2019-01-25T04:56:38.403Z",
+        "is_favorite": "true",
         "id": 9
       },
       {
@@ -900,6 +900,24 @@
         "comments": "Four Stars :)",
         "createdAt": "2019-01-25T01:04:20.060Z",
         "updatedAt": "2019-01-25T01:04:20.060Z"
+      },
+      {
+        "id": 1548392027497,
+        "restaurant_id": 10,
+        "name": "Michele",
+        "rating": 3,
+        "comments": "Average. I'll admit most of it is fresh. I did like the chips and salsa. Guacamole was fresh but it lacked flavor. Needed onions, garlic, salt and lime juice. \nI got the shrimp fajitas and they were good. Not amazing or anything to knock your socks off, but again, it needed more flavor.",
+        "createdAt": "2019-01-25T04:53:47.550Z",
+        "updatedAt": "2019-01-25T04:53:47.550Z"
+      },
+      {
+        "id": 1548392165810,
+        "restaurant_id": 10,
+        "name": "Lacey",
+        "rating": 3,
+        "comments": "According to Restaurant Reviews people really love this place, but I've eaten here twice, and both times it's left me rather unimpressed. It is fine, but very average, and with so many great options for Mexican food why settle for average? It's also consistently busy at dinner time, enough that it has been a struggle to find a parking spot. I won't say you'll be disappointed if you dine here, just that you'll probably be happier if you dine elsewhere.",
+        "createdAt": "2019-01-25T04:56:05.848Z",
+        "updatedAt": "2019-01-25T04:56:05.848Z"
       }
     ]
   },
@@ -955,7 +973,7 @@
       "id": 10
     },
     "reviews": {
-      "id": 1548378259769
+      "id": 1548392165810
     }
   }
 }

@@ -574,7 +574,7 @@ nav h1 a {
 
 .modal-content {
   background-color: #f3f3f3;
-  margin: 10% auto;
+  margin: 5% auto;
   width: 70%;
   border-radius: 5px;
   border: 3px solid #252831;
@@ -823,6 +823,7 @@ input:focus ~ .bar:after {
   overflow: hidden;
   transition: 0.1s;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  outline: none;
   opacity: 1;
   transform: translateY(250px); }
 
