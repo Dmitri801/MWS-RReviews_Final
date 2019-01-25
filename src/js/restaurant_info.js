@@ -4,7 +4,7 @@ const restaurantHours = document.getElementById("restaurant-hours");
 const addReviewBtn = document.getElementById("addReviewBtn");
 const modal = document.getElementById("mainModal");
 const closeBtn = document.getElementById("closeBtn");
-const stars = document.querySelectorAll(".fas.fa-star");
+const stars = document.querySelectorAll("input[name='star']");
 const selectRatingTxt = document.getElementById("selectRatingTxt");
 const addReviewForm = document.getElementById("addReviewForm");
 const ratingInput = document.getElementById("ratingValue");
@@ -15,8 +15,36 @@ const snackBar = document.getElementById("snackBar");
 const snackBarMsg = document.getElementById("snackbarMsg");
 const snackBarDismiss = document.getElementById("snackbarDismiss");
 const heartIcon = document.createElement("i");
+heartIcon.setAttribute("role", "button");
+heartIcon.setAttribute("tabindex", "0");
+heartIcon.setAttribute("aria-label", "Add Restaurants to Favorites");
+
 let restaurant;
 var newMap;
+
+// Check if browser is running incognito mode
+let incognito;
+const isIncognito = () =>
+  new Promise((resolve, reject) => {
+    const fs = window.RequestFileSystem || window.webkitRequestFileSystem;
+
+    if (!fs) {
+      reject("Cant determine whether browser is running in incognito mode!");
+    }
+
+    fs(
+      window.TEMPORARY,
+      100,
+      resolve.bind(null, false),
+      resolve.bind(null, true)
+    );
+  });
+
+isIncognito()
+  .then(res => {
+    incognito = res;
+  })
+  .catch(console.log);
 
 class Toaster {
   constructor(element, message, type) {
@@ -32,8 +60,10 @@ class Toaster {
     }
     snackBarMsg.innerHTML = message;
     element.classList.add("activate");
+    document.getElementById("snackbarDismiss").setAttribute("tabindex", "0");
     setTimeout(() => {
       element.classList.remove("activate");
+      document.getElementById("snackbarDismiss").setAttribute("tabindex", "-1");
     }, 7700);
   }
   static dismiss(element) {
@@ -75,6 +105,11 @@ document.addEventListener("DOMContentLoaded", event => {
 
 snackBarDismiss.addEventListener("click", () => {
   Toaster.dismiss(snackBar);
+});
+snackBarDismiss.addEventListener("keydown", e => {
+  if (e.keyCode == 13) {
+    Toaster.dismiss(snackBar);
+  }
 });
 
 /**
@@ -173,7 +208,7 @@ function favoriteRestaurantSync(restaurantId) {
     id: Date.now(),
     restaurantId
   };
-  if ("serviceWorker" in navigator && "SyncManager" in window) {
+  if ("serviceWorker" in navigator && "SyncManager" in window && !incognito) {
     navigator.serviceWorker.ready.then(sw => {
       writeData("syncData", favoriteData).then(data => {
         return sw.sync
@@ -186,8 +221,10 @@ function favoriteRestaurantSync(restaurantId) {
                 "error"
               );
               heartIcon.classList.add("favorite");
+              heartIcon.setAttribute("aria-pressed", "true");
             } else {
               heartIcon.classList.add("favorite");
+              heartIcon.setAttribute("aria-pressed", "true");
               Toaster.show(
                 snackBar,
                 "Restaurant added to favorites!",
@@ -214,7 +251,7 @@ function unfavoriteRestaurantSync(restaurantId) {
     id: Date.now(),
     restaurantId
   };
-  if ("serviceWorker" in navigator && "SyncManager" in window) {
+  if ("serviceWorker" in navigator && "SyncManager" in window && !incognito) {
     navigator.serviceWorker.ready.then(sw => {
       writeData("syncData", unfavoriteData).then(data => {
         return sw.sync
@@ -227,8 +264,10 @@ function unfavoriteRestaurantSync(restaurantId) {
                 "error"
               );
               heartIcon.classList.remove("favorite");
+              heartIcon.setAttribute("aria-pressed", "false");
             } else {
               heartIcon.classList.remove("favorite");
+              heartIcon.setAttribute("aria-pressed", "false");
               Toaster.show(
                 snackBar,
                 "Restaurant removed from favorites!",
@@ -242,6 +281,7 @@ function unfavoriteRestaurantSync(restaurantId) {
       });
     });
   } else {
+    console.log("Background Sync Unsupported");
     DBHelper.unfavoriteRestaurant(restaurantId, () => {
       heartIcon.classList.remove("favorite");
       Toaster.show(snackBar, "Restaurant removed from favorites!", "success");
@@ -259,11 +299,21 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   ) {
     heartIcon.className = "fas fa-heart";
     heartIcon.classList.add("favorite");
+    heartIcon.setAttribute("aria-pressed", "true");
     heartIcon.addEventListener("click", () => {
       if (heartIcon.classList.contains("favorite")) {
         unfavoriteRestaurantSync(restaurant.id);
       } else {
         favoriteRestaurantSync(restaurant.id);
+      }
+    });
+    heartIcon.addEventListener("keydown", e => {
+      if (e.keyCode == 13) {
+        if (heartIcon.classList.contains("favorite")) {
+          unfavoriteRestaurantSync(restaurant.id);
+        } else {
+          favoriteRestaurantSync(restaurant.id);
+        }
       }
     });
     favoriteContainer.appendChild(heartIcon);
@@ -276,11 +326,21 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   ) {
     heartIcon.className = "fas fa-heart";
     heartIcon.classList.remove("favorite");
+    heartIcon.setAttribute("aria-pressed", "false");
     heartIcon.addEventListener("click", () => {
       if (!heartIcon.classList.contains("favorite")) {
         favoriteRestaurantSync(restaurant.id);
       } else {
         unfavoriteRestaurantSync(restaurant.id);
+      }
+    });
+    heartIcon.addEventListener("keydown", e => {
+      if (e.keyCode == 13) {
+        if (!heartIcon.classList.contains("favorite")) {
+          favoriteRestaurantSync(restaurant.id);
+        } else {
+          unfavoriteRestaurantSync(restaurant.id);
+        }
       }
     });
     favoriteContainer.appendChild(heartIcon);
@@ -295,13 +355,19 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const title = document.getElementById("restaurant-title");
   title.innerHTML = restaurant.name;
   title.setAttribute("tabindex", "-1");
+  const restImage = document.querySelector("#restaurant-pic");
+  const mainPictureSrc = document.createElement("source");
+  mainPictureSrc.setAttribute(
+    "srcset",
+    `/webpimg/${restaurant.id}-medium.webp`
+  );
   const smallImgSrc = document.querySelector(".src-small-pic");
   smallImgSrc.setAttribute("srcset", `/images/${restaurant.id}-small.jpg`);
   const image = document.getElementById("restaurant-img");
   image.className = "restaurant-img";
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.setAttribute("alt", `Image for ${restaurant.name}`);
-
+  restImage.insertBefore(mainPictureSrc, restImage.childNodes[0]);
   const cuisine = document.getElementById("restaurant-cuisine");
   cuisine.innerHTML = restaurant.cuisine_type;
 
@@ -316,109 +382,6 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   // fill reviews
   fillReviewsHTML();
 };
-
-// fillRestaurantHTML = (restaurant = self.restaurant) => {
-//   const heartIcon = document.createElement("i");
-//   if (
-//     restaurant.is_favorite == "true" ||
-//     true ||
-//     heartIcon.classList.contains("favorite")
-//   ) {
-//     heartIcon.className = "fas fa-heart";
-//     heartIcon.classList.add("favorite");
-//     heartIcon.addEventListener("click", () => {
-//       if (navigator.onLine) {
-//         if (heartIcon.classList.contains("favorite")) {
-//           DBHelper.unfavoriteRestaurant(restaurant.id, () => {
-//             heartIcon.classList.remove("favorite");
-//             Toaster.show(
-//               snackBar,
-//               "Restaurant removed from favorites!",
-//               "success"
-//             );
-//           });
-//         } else {
-//           DBHelper.favoriteRestaurant(restaurant.id, () => {
-//             heartIcon.classList.add("favorite");
-//             Toaster.show(snackBar, "Restaurant added to favorites!", "success");
-//           });
-//         }
-//       } else {
-//         Toaster.show(
-//           snackBar,
-//           "You need to have internet connection to favorite/unfavorite",
-//           "error"
-//         );
-//       }
-//     });
-//     favoriteContainer.appendChild(heartIcon);
-//   }
-
-//   if (
-//     restaurant.is_favorite == "false" ||
-//     false ||
-//     !heartIcon.classList.contains("favorite")
-//   ) {
-//     heartIcon.className = "fas fa-heart";
-//     heartIcon.classList.remove("favorite");
-//     heartIcon.addEventListener("click", () => {
-//       if (navigator.onLine) {
-//         if (!heartIcon.classList.contains("favorite")) {
-//           DBHelper.favoriteRestaurant(restaurant.id, () => {
-//             heartIcon.classList.add("favorite");
-//             Toaster.show(snackBar, "Restaurant added to favorites!", "success");
-//           });
-//         } else {
-//           DBHelper.unfavoriteRestaurant(restaurant.id, () => {
-//             heartIcon.classList.remove("favorite");
-//             Toaster.show(
-//               snackBar,
-//               "Restaurant removed from favorites!",
-//               "success"
-//             );
-//           });
-//         }
-//       } else {
-//         Toaster.show(
-//           snackBar,
-//           "You need to have internet connection to favorite/unfavorite",
-//           "error"
-//         );
-//       }
-//     });
-//     favoriteContainer.appendChild(heartIcon);
-//   }
-//   const name = document.getElementById("restaurant-name");
-//   name.innerHTML = restaurant.name;
-
-//   const address = document.getElementById("restaurant-address");
-//   address.innerHTML = `<i id="address-icon" class="fas fa-map-marker-alt"></i> ${
-//     restaurant.address
-//   }`;
-//   const title = document.getElementById("restaurant-title");
-//   title.innerHTML = restaurant.name;
-//   title.setAttribute("tabindex", "-1");
-//   const smallImgSrc = document.querySelector(".src-small-pic");
-//   smallImgSrc.setAttribute("srcset", `/images/${restaurant.id}-small.jpg`);
-//   const image = document.getElementById("restaurant-img");
-//   image.className = "restaurant-img";
-//   image.src = DBHelper.imageUrlForRestaurant(restaurant);
-//   image.setAttribute("alt", `Image for ${restaurant.name}`);
-
-//   const cuisine = document.getElementById("restaurant-cuisine");
-//   cuisine.innerHTML = restaurant.cuisine_type;
-
-//   // Add title to review form
-//   const reviewFormHeader = document.getElementById("addReviewHeader");
-//   reviewFormHeader.innerHTML += restaurant.name;
-
-//   // fill operating hours
-//   if (restaurant.operating_hours) {
-//     fillRestaurantHoursHTML();
-//   }
-//   // fill reviews
-//   fillReviewsHTML();
-// };
 
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
@@ -602,24 +565,91 @@ const reviewMessage = [
 ];
 
 addReviewBtn.addEventListener("click", openReviewModal);
-closeBtn.addEventListener("click", closeReviewModal);
+closeBtn.addEventListener("click", e => {
+  closeReviewModal();
+});
 window.addEventListener("click", outsideModalClick);
-function openReviewModal() {
+function openReviewModal(e) {
   modal.style.display = "block";
-  stars.forEach(star => {
-    star.addEventListener("click", setRating);
-  });
-
-  selectRatingTxt.innerHTML = reviewMessage[parseInt(ratingInput.value)];
+  setStarRating();
+  document.getElementById("wrapper").setAttribute("aria-hidden", true);
+  document.getElementById("wrapper").setAttribute("aria-disabled", true);
+  document.getElementById("nameInput").focus();
+  document.addEventListener("keydown", setEscapeToCloseModal);
+  document.addEventListener("keydown", trapTabKey);
 }
-function closeReviewModal() {
+function closeReviewModal(onReviewSubmit) {
   modal.style.display = "none";
+  document.getElementById("wrapper").setAttribute("aria-hidden", false);
+  document.removeEventListener("keydown", setEscapeToCloseModal);
+  document.removeEventListener("keydown", trapTabKey);
+  if (!onReviewSubmit) {
+    addReviewBtn.focus();
+  } else {
+    snackBar.setAttribute("tabindex", "0");
+    snackBar.focus();
+    setTimeout(() => {
+      snackBar.setAttribute("tabindex", "-1");
+    }, 3000);
+  }
 }
 
 function outsideModalClick(e) {
   if (e.target === modal) {
-    modal.style.display = "none";
+    closeReviewModal();
   }
+}
+
+function trapTabKey(e) {
+  if (e.keyCode === 9 && document.activeElement.value === "Submit") {
+    closeBtn.focus();
+  }
+  if (e.keyCode === 9 && document.activeElement.nodeName === "BUTTON") {
+    e.preventDefault();
+    nameInput.focus();
+  }
+}
+
+function setEscapeToCloseModal(e) {
+  if (e.keyCode === 27) {
+    closeReviewModal();
+  }
+}
+
+function setStarRating() {
+  stars.forEach((star, index) => {
+    star.addEventListener("change", event => {
+      setRating(event.target);
+    });
+    star.addEventListener("keydown", event => {
+      if (event.keyCode == 13) {
+        setRating(event.target);
+      }
+      if (event.keyCode == 39 || event.keyCode == 40) {
+        event.preventDefault();
+        if (index !== 0) {
+          setRating(
+            stars[index].previousSibling.previousSibling.previousSibling,
+            event
+          );
+        } else {
+          setRating(stars[4], event);
+        }
+      }
+      if (event.keyCode == 37 || event.keyCode == 38) {
+        event.preventDefault();
+
+        if (index == 4) {
+          setRating(stars[0], event);
+        } else {
+          setRating(stars[index].nextSibling.nextSibling.nextSibling, event);
+        }
+      }
+    });
+  });
+
+  selectRatingTxt.innerHTML =
+    reviewMessage[parseInt(ratingInput.getAttribute("data-rating"))];
 }
 
 // TextArea scroll listen
@@ -633,22 +663,17 @@ commentsInput.addEventListener("scroll", event => {
 
 // Star rating select
 
-function setRating(event) {
-  let clickedStar = event.currentTarget;
-
-  let match = false;
-  let num = 0;
-  stars.forEach((star, index) => {
-    if (match) {
-      star.classList.remove("rated");
+function setRating(element) {
+  ratingInput.setAttribute("data-rating", element.value);
+  element.checked = true;
+  element.focus();
+  selectRatingTxt.innerHTML =
+    reviewMessage[parseInt(ratingInput.getAttribute("data-rating"))];
+  stars.forEach(star => {
+    if (star.checked) {
+      star.setAttribute("tabindex", "0");
     } else {
-      star.classList.add("rated");
-    }
-    if (clickedStar === star) {
-      match = true;
-      num = index + 1;
-      ratingInput.value = num;
-      selectRatingTxt.innerHTML = reviewMessage[parseInt(ratingInput.value)];
+      star.setAttribute("tabindex", "-1");
     }
   });
 }
@@ -661,17 +686,18 @@ addReviewForm.addEventListener("submit", e => {
 });
 
 function submitReviewForm(restaurant = self.restaurant) {
-  if (ratingInput.value == 0) {
+  if (ratingInput.getAttribute("data-rating") == 0) {
     Toaster.show(snackBar, "Rating is required.", "error");
+    stars[4].focus();
   } else {
     let newReview = {
       id: Date.now(),
       restaurant_id: restaurant.id,
       name: nameInput.value,
-      rating: parseInt(ratingInput.value),
+      rating: parseInt(ratingInput.getAttribute("data-rating")),
       comments: commentsInput.value
     };
-    if ("serviceWorker" in navigator && "SyncManager" in window) {
+    if ("serviceWorker" in navigator && "SyncManager" in window && !incognito) {
       navigator.serviceWorker.ready.then(sw => {
         writeData("syncData", newReview).then(data => {
           return sw.sync
@@ -683,12 +709,12 @@ function submitReviewForm(restaurant = self.restaurant) {
                   "You have no internet! We'll send the review when there's a connection 🤗 ",
                   "error"
                 );
-                closeReviewModal();
+                closeReviewModal(true);
                 reviewList.appendChild(createReviewHTML(newReview));
                 clearReviewInputs();
               } else {
                 Toaster.show(snackBar, "Review Added!", "success");
-                closeReviewModal();
+                closeReviewModal(true);
                 reviewList.appendChild(createReviewHTML(newReview));
                 clearReviewInputs();
               }
@@ -702,7 +728,7 @@ function submitReviewForm(restaurant = self.restaurant) {
       DBHelper.postNewReview(newReview, () => {
         console.log("Background Sync Unsupported");
         Toaster.show(snackBar, "Review Added!", "success");
-        closeReviewModal();
+        closeReviewModal(true);
         reviewList.appendChild(createReviewHTML(newReview));
         clearReviewInputs();
       });
@@ -711,9 +737,9 @@ function submitReviewForm(restaurant = self.restaurant) {
 }
 
 function clearReviewInputs() {
-  ratingInput.value = "0";
+  ratingInput.setAttribute("data-rating", "0");
   stars.forEach(star => {
-    star.classList.remove("rated");
+    star.checked = false;
   });
   nameInput.value = "";
   commentsInput.value = "";

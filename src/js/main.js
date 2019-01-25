@@ -157,11 +157,26 @@ resetRestaurants = restaurants => {
  */
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById("restaurants-list");
-  restaurants.forEach(restaurant => {
-    ul.append(createRestaurantHTML(restaurant));
+  restaurants.forEach((restaurant, index) => {
+    if (index < 3) {
+      ul.append(createRestaurantHTML(restaurant));
+    }
   });
   addMarkersToMap();
 };
+
+// Add event listener to lazy load images
+window.addEventListener("scroll", (event, restaurants = self.restaurants) => {
+  const ul = document.getElementById("restaurants-list");
+  if (window.scrollY > 1 && ul.children.length <= 3) {
+    console.log("Lazy loadin' fam..");
+    restaurants.forEach((restaurant, index) => {
+      if (index > 3) {
+        ul.append(createRestaurantHTML(restaurant));
+      }
+    });
+  }
+});
 
 /**
  * Create restaurant HTML.
@@ -182,9 +197,13 @@ createRestaurantHTML = restaurant => {
   );
 
   srcElementTwo.setAttribute("media", "(max-width: 446px)");
-  srcElementOne.setAttribute("srcset", `/images/${restaurant.id}-small.jpg`);
-  srcElementTwo.setAttribute("srcset", `/images/${restaurant.id}-small.jpg`);
-  srcElementMain.setAttribute("srcset", `/images/${restaurant.id}-medium.jpg`);
+  srcElementOne.setAttribute("srcset", `/webpimg/${restaurant.id}-small.webp`);
+  srcElementTwo.setAttribute("srcset", `/webpimg/${restaurant.id}-small.webp`);
+  srcElementMain.setAttribute(
+    "srcset",
+    `/webpimg/${restaurant.id}-medium.webp`
+  );
+  pictureElement.appendChild(srcElementMain);
   pictureElement.appendChild(srcElementOne);
   pictureElement.appendChild(srcElementTwo);
   pictureElement.appendChild(image);

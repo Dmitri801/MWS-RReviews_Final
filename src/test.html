@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Tester</title>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+    />
+  </head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #262626;
+    }
+    .rating {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: row-reverse;
+    }
+    .rating input {
+      clip-path: polygon(0 0);
+    }
+    .rating label {
+      display: block;
+      cursor: pointer;
+      width: 50px;
+    }
+
+    .rating label:before {
+      content: "\f005";
+      font-family: "Font Awesome\ 5 Free";
+      font-weight: 900;
+      position: relative;
+      display: block;
+      font-size: 50px;
+      color: #ddd;
+    }
+
+    .rating label:after {
+      content: "\f005";
+      font-family: "Font Awesome\ 5 Free";
+      font-weight: 900;
+      position: absolute;
+      display: block;
+      font-size: 50px;
+      color: #fbcd28;
+      top: 0;
+      opacity: 0;
+      transition: 0.5s;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    .rating label:hover:after,
+    .rating label:hover ~ label:after,
+    .rating input:checked ~ label:after {
+      opacity: 1;
+    }
+  </style>
+  <body>
+    <div class="rating" data-rating="0">
+      <input type="radio" name="star" id="star5" value="5" /><label
+        for="star5"
+      ></label>
+      <input type="radio" name="star" id="star4" value="4" /><label
+        for="star4"
+      ></label>
+      <input type="radio" name="star" id="star3" value="3" /><label
+        for="star3"
+      ></label>
+      <input type="radio" name="star" id="star2" value="2" /><label
+        for="star2"
+      ></label>
+      <input type="radio" name="star" id="star1" value="1" /><label
+        for="star1"
+      ></label>
+    </div>
+
+    <script>
+      const radioInputs = document.querySelectorAll("input[type='radio']");
+      const rating = document.querySelector(".rating");
+      radioInputs.forEach(input => {
+        input.addEventListener("change", event => {
+          rating.setAttribute("data-rating", event.target.value);
+        });
+      });
+    </script>
+  </body>
+</html>

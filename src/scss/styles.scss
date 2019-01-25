@@ -25,12 +25,7 @@ body {
   width: 100%;
   overflow-x: hidden;
 }
-/* .inside .wrapper {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow-x: hidden;
-} */
+
 ul,
 li {
   font-family: Arial, Helvetica, sans-serif;
@@ -72,6 +67,10 @@ nav,
 section {
   display: block;
 }
+.leaflet-container a {
+  color: #0a3648 !important;
+}
+
 #maincontent {
   background-color: #f3f3f3;
   min-height: 100%;
@@ -412,6 +411,7 @@ nav h1 a {
   font-size: 40px;
   color: #ddd;
   transition: 0.3s;
+  outline: none;
   cursor: pointer;
 }
 
@@ -592,7 +592,8 @@ nav h1 a {
   overflow: hidden;
   position: relative;
   max-width: 100%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 0 4px 0 rgba(17, 22, 26, 0.16),
+    0 2px 4px 0 rgba(17, 22, 26, 0.08), 0 4px 8px 0 rgba(17, 22, 26, 0.08);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 #reviews-list li p {
@@ -653,6 +654,8 @@ nav h1 a {
   font-size: 1.9em;
   color: #ddd;
   transition: 0.3s;
+  background: none;
+  border: none;
   cursor: pointer;
 }
 .close-btn:hover {
@@ -748,9 +751,6 @@ input[name="name"]:focus ~ .bar:before,
 input:focus ~ .bar:after {
   width: 50%;
 }
-// input[name="name"]:focus {
-//   width: 95%;
-// }
 
 .comments-textarea {
   font-size: 18px;
@@ -805,24 +805,49 @@ input:focus ~ .bar:after {
 }
 
 // MATERIAL DESIGN INPUTS ---- END -----
-
-.rating-select {
+.rating {
+  display: flex;
+  flex-direction: row-reverse;
+}
+.rating input {
+  clip-path: polygon(0 0);
+  width: 1px;
+}
+.rating label {
+  display: block;
   cursor: pointer;
+  width: 25px;
+  position: relative;
 }
 
-.fas.fa-star {
-  font-size: 24px;
+.rating label:before {
+  content: "\f005";
+  font-family: "Font Awesome\ 5 Free";
+  font-weight: 900;
+  position: relative;
+  display: block;
+  font-size: 25px;
   color: #ddd;
-  transition: 0.1s;
-}
-.fas.fa-star:hover {
-  border-color: #fbcd28;
 }
 
-.fas.fa-star.rated {
+.rating label:after {
+  content: "\f005";
+  font-family: "Font Awesome\ 5 Free";
+  font-weight: 900;
+  position: absolute;
+  display: block;
+  font-size: 25px;
   color: #fbcd28;
+  top: 0;
+  opacity: 0;
+  transition: 0.5s;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
-
+.rating label:hover:after,
+.rating label:hover ~ label:after,
+.rating input:checked ~ label:after {
+  opacity: 1;
+}
 .form-row.btn {
   width: 400px;
 }
